@@ -1,0 +1,56 @@
+1) Inicial — Crear endpoint anonymize
+I am creating a Data Privacy Vault so that PII (Personally identifiable information) becomes anonymized using node.js. I need to start with the first step: have an endpoint so that it receives a single string with a message that contains PII like names, emails and phone numbers and returns it anonymized replacing the whole name, email and phone with an alphanumeric token. Please act as an experienced node.js developer and tell me step by step how would you do it. Ask me for information whenever you need it and use good coding practices and comments in the functions.
+
+An example of the request can be:
+curl -X POST http://localhost:3001/anonymize -H "Content-Type: application/json" -d '{"message":"oferta de trabajo para Pepito Perez con email pepito@gmail.com y teléfono 3211234567"}'
+
+The response to that request would be:
+{
+  "anonymizedMessage": "oferta de trabajo para d7e8e0bf bd673df2 con email b09bde30 y teléfono dd195b6c"
+}
+________________________________________
+2) Añadir deanonymize
+Now add the deanonymize service. Implement a new /deanonymize endpoint that receives a JSON with an anonymizedMessage containing tokens like NAME_<token>, EMAIL_<token>, and PHONE_<token>, and returns the original message by replacing each token with its original value using the same mapping created in the anonymization step.
+
+Example request:
+curl -X POST http://localhost:3001/deanonymize -H "Content-Type: application/json" -d '{"anonymizedMessage":"oferta de trabajo para NAME_e1be92e2b3a5 con email EMAIL_8004719c6ea5 y teléfono PHONE_40e83067b9cb"}'
+
+Response:
+{"message":"oferta de trabajo para Pepito Perez con email pepito@gmail.com y teléfono 3211234567"}
+________________________________________
+3) Añadir persistencia en MongoDB
+Add MongoDB persistence to my Node.js and Express Data Privacy Vault project.
+
+Connection string:
+mongodb+srv://collegek450_db_user:<db_password>@dataprivacyvault.tsgey4d.mongodb.net/?appName=DataPrivacyVault
+
+Do the following:
+1. Install and import mongoose.
+2. Create a `.env` file with `DB_PASSWORD` and use it in the connection string.
+3. Create a `config/db.js` file to connect to MongoDB using Mongoose and dotenv.
+4. Create a `Mapping` model with fields: `type` (String), `originalValue` (String), and `token` (String).
+5. In the `/anonymize` endpoint, after generating each token, save `{ type, originalValue, token }` to MongoDB.
+6. In the `/deanonymize` endpoint, find tokens in MongoDB to get the original values.
+________________________________________
+4) Conectar con OpenAI y crear secureChatGPT
+I need to connect my Node.js and Express Data Privacy Vault project with the OpenAI API.
+
+Do the following:
+
+1. Create a new class `OpenAIService` (in a separate file like `services/openaiService.js`).
+2. In that class:
+   - Import `openai` library.
+   - Load the API key from an `.env` variable called `OPENAI_API_KEY`.
+   - Create a method `getCompletion(prompt)` that sends the prompt to OpenAI (using the `gpt-3.5-turbo` or `gpt-4o-mini` model) and returns the text completion.
+3. In `server.js`, create a new endpoint `/secureChatGPT` that:
+   - Receives a POST request with `{ "prompt": "some text with PII" }`.
+   - Anonymizes the prompt using the same functions from the `/anonymize` endpoint.
+   - Calls `OpenAIService.getCompletion()` with the anonymized text.
+   - Gets the response and then des-anonymizes it using your existing `deanonymize` function.
+   - Sends the final, de-anonymized response back to the client.
+4. Use async/await and proper error handling.
+5. Generate a `README.md` file in the root folder describing:
+   - What the project does.
+   - How to install dependencies.
+   - How to run it locally.
+   - Example `curl` commands to test each endpoint.

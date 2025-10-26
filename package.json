@@ -1,0 +1,39 @@
+{
+  "name": "data-privacy-vault",
+  "version": "1.0.0",
+  "description": "PII Anonymization API for Data Privacy Vault",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node -r dotenv/config src/server.js",
+    "dev": "nodemon -r dotenv/config src/server.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "pii",
+    "anonymization",
+    "privacy",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "joi": "^17.11.0",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.19.2",
+    "openai": "^6.7.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
